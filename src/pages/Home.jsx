@@ -1,9 +1,10 @@
-import React from 'react';
+import Jh1 from '../components/basics/Jh1';
 
 const Home = () => {
+
     return (
         <div>
-            <h1>HOME</h1>
+            <Jh1>HOME APP</Jh1>
             
         </div>
     );
