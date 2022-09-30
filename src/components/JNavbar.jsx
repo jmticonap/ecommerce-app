@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const JNavbar = () => {
     return (
-        <Navbar bg="dark" variant="dark">
+        <Navbar bg="primary" variant="dark">
             <Container>
                 <Navbar.Brand as={Link} to='/'>Navbar</Navbar.Brand>
                 <Nav className="me-auto">
