@@ -17,9 +17,9 @@ const Home = () => {
                 {
                     productList?.map(product => {
                         return (
-                            <div style={{width:200}}>
+                            <div key={product.id} style={{width:200}}>
                                 <ImageSlider
-                                    key={product.id}
+                                    throwRandom                                    
                                     width={200}
                                     height={200}
                                     imgs={product.productImgs}

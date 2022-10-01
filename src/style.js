@@ -78,6 +78,7 @@ const appStyle = {
                 width: _in(w)||'200px'
             }),
             img: {
+                position: 'relative',
                 width: '100%',
                 height: '100%',
                 objectFit: 'scale-down'
