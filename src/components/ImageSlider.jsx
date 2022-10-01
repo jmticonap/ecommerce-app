@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useEffect } from 'react'
-import appStyle from '../style';
-import { useState } from 'react';
+import appStyle from '../style'
+import { useState } from 'react'
 import imgLoader from '../assets/img/loader.gif'
 
-const ImageSlider = ({ sx, imgs = [], width = 300, height = 300, throwRandom }) => {
+const ImageSlider = ({ sx, imgs = [], throwRandom, ratio, id }) => {
     const style = appStyle['default'].imageSlider
     const [currentImg, setCurrentImg] = useState(0)
     const [isLoaded, setIsLoaded] = useState(false)
     const [bottom, setBottom] = useState({ bottom: '0' })
+    const breakpoints = {s:576, m:768, l:992, xl:1200}
 
     const goBack = evt => {
         setBottom({ bottom: '100%' })
@@ -19,7 +20,7 @@ const ImageSlider = ({ sx, imgs = [], width = 300, height = 300, throwRandom }) 
                 setCurrentImg(imgs.length - 1)
             else
                 setCurrentImg(currentImg - 1)
-        }, 1000);
+        }, 500);
     }
     const goForward = evt => {
         setBottom({ bottom: '100%' })
@@ -29,7 +30,7 @@ const ImageSlider = ({ sx, imgs = [], width = 300, height = 300, throwRandom }) 
                 setCurrentImg(0)
             else
                 setCurrentImg(currentImg + 1)
-        }, 1000);
+        }, 500);
     }
     const goRandom = () => {
         //Change image between 10 and 50 seconds
@@ -45,7 +46,7 @@ const ImageSlider = ({ sx, imgs = [], width = 300, height = 300, throwRandom }) 
                 goRandom()
         setTimeout(() => {
             setBottom({ bottom: '0' })
-        }, 1000);
+        }, 500);
     }
 
     useEffect(() => {
@@ -54,18 +55,18 @@ const ImageSlider = ({ sx, imgs = [], width = 300, height = 300, throwRandom }) 
     }, [])
 
     return (
-        <div css={style.wrapper(width)}>
+        <div id={id} css={{...style.wrapper, ...sx}}>
             <div onClick={goBack} css={style.btnLeft}></div>
             <div onClick={goForward} css={style.btnRight}></div>
             {
                 isLoaded && (
                     <img
-                        css={style.loader(height/2)}
+                        css={{height: '33%', width: 'auto'}}
                         src={imgLoader}
                         alt="Loader" />
                 )
             }
-            <div css={style.container(width, height)}>
+            <div css={{width: '100%', height: '100%', position:'relative'}}>
                 {
                     imgs && imgs.length > 0
                         ? (<img                            

@@ -1,3 +1,7 @@
 *{
-    transition: bottom 1s;
+    transition: bottom 0.5s;
+}
+
+ul{
+    list-style: none;
 }
