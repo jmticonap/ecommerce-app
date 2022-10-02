@@ -25,9 +25,52 @@ const appStyle = {
             color: 'hotpink',
             fontWeight: 600
         },
-        flexCenter:{
+        flexCenter: {
             display: 'flex',
             justifyContent: 'center'
+        },
+        cart: {
+            shop: visible => ({
+                position: 'fixed',
+                top: 0,
+                right: visible ? '0' : '-100vw',
+                height: '100vh',
+                width: '420px',
+                backgroundColor: 'var(--body-color)',
+                padding: '2rem',
+                boxShadow: '0 0 2rem black',
+                opacity: visible ? '1' : '0',
+                transition: visible ? '0.5s right, 0.5s opacity' : '1s right, 1s opacity',
+                zIndex: 30
+            }),
+            shopTitle: {
+                textAlign: 'center',
+                paddingBottom: '5rem'
+            },
+            shopResume: {
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                alignItems: 'center',
+                marginTop: '5rem'
+            },
+            shopResumeItems: {
+                textAlign: 'left',
+                width: '50%'
+            },
+            shopResumeTotal: {
+                textAlign: 'right',
+                width: '50%'
+            },
+            shopBtnContainer: {
+                width: '100%',
+                textAlign: 'right',
+                paddingTop: '1rem'
+            },
+            showShop: {
+                right: '0',
+                opacity: '1',
+                transition: '0.5s right, 0.5s opacity'
+            }
         },
         home: {
             main: {
@@ -38,17 +81,25 @@ const appStyle = {
                 listStyle: 'none',
                 padding: '0'
             },
-            filterLi:{
+            filterLi: {
                 textAlign: 'left',
                 padding: '0.25rem'
             },
-            filterLink:{
+            filterLink: {
                 padding: '0.25rem 1rem',
+                backgroundColor: 'transparent',
+                color: 'var(--bs-black)',
+                borderRadius: '1rem',
                 '&:hover': {
                     backgroundColor: 'var(--bs-primary)',
-                    color: '#FFF',
-                    borderRadius: '1rem'
+                    color: '#FFF'
                 }
+            },
+            filterLinkActive: {
+                padding: '0.25rem 1rem',
+                borderRadius: '1rem',
+                backgroundColor: 'var(--bs-primary)',
+                color: '#FFF'
             },
             img: {
                 width: 200,
@@ -62,7 +113,7 @@ const appStyle = {
                 gap: '1rem',
                 width: '100%'
             },
-            card:{
+            card: {
                 backgroundColor: '#FFF',
                 padding: '1rem',
                 borderRadius: '0.5rem',
@@ -122,16 +173,16 @@ const appStyle = {
                 padding: '1rem 2rem',
                 gap: '1rem',
                 [mq[0]]: {
-                    
+
                 },
                 [mq[1]]: {
-                    
+
                 },
                 [mq[2]]: {
                     gridTemplateColumns: '6fr 4fr'
                 },
                 [mq[3]]: {
-                    
+
                 }
             }
         }

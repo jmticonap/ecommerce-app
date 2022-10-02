@@ -15,7 +15,6 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    console.log("Cargando productos")
     dispatch(loadProductDataThunk())
     dispatch(loadCategoryDataThunk())
   },[])

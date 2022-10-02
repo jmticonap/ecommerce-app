@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import appStyle from '../style';
 import Jh1 from '../components/basics/Jh1';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ImageSlider from '../components/ImageSlider';
 import { Link } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ const Home = () => {
     const style = appStyle['default'].home
     const productList = useSelector(state => state.productDataSlice)
     const categoryList = useSelector(state => state.categoryDataSlice)
+    const [currentCategory, setCurrentCategory] = useState('*')
 
     const renderCards = () => {
 
@@ -19,8 +20,17 @@ const Home = () => {
         evt.target.parentElement.nextElementSibling.classList.toggle('show')
         evt.target.classList.toggle('collapsed')
     }
-    const categoryFilter = evt => {
+    const categoryFilter = (evt, category) => {
         evt.preventDefault()
+        setCurrentCategory(category)
+    }
+    const filterProductList = () => {
+        if (currentCategory === '*') {
+            return productList
+        } else {
+            return productList.filter(product => product.category.name === currentCategory.name)
+        }
+
     }
 
     return (
@@ -29,32 +39,40 @@ const Home = () => {
             <main css={style.main}>
                 <aside css={{ width: '400px' }}>
 
-
-
                     <div className="accordion" id="accordionExample">
                         <div className="accordion-item">
                             <h2 className="accordion-header" id="headingOne">
                                 <button onClick={openCollaps} className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Accordion Item #1
+                                    Categories
                                 </button>
                             </h2>
                             <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample" >
                                 <div className="accordion-body">
 
-                                    <ul css={style.categoryList}>
-                                        <li>
-                                            <h3>Category List</h3>
-                                            <ul>
-                                                <li css={style.filterLi}><a onClick={categoryFilter} css={style.filterLink} href=''>All categories</a></li>
-                                                {
-                                                    categoryList?.map(cat => (
-                                                        cat.status == 'active' &&
-                                                        <li css={style.filterLi} key={cat.name}><a onClick={categoryFilter} css={style.filterLink} href=''>{cat.name}</a></li>
-                                                    ))
-                                                }
-                                            </ul>
+
+                                    <ul>
+                                        <li
+                                            css={style.filterLi}>
+                                            <a
+                                                onClick={evt => categoryFilter(evt, '*')}
+                                                css={currentCategory == '*' ? style.filterLinkActive : style.filterLink}
+                                                href=''>All categories</a>
                                         </li>
+                                        {
+                                            categoryList?.map(cat => (
+                                                cat.status == 'active' &&
+                                                <li css={style.filterLi} key={cat.name}>
+                                                    <a
+                                                        onClick={evt => categoryFilter(evt, cat)}
+                                                        css={currentCategory.id == cat.id ? style.filterLinkActive : style.filterLink}
+                                                        href=''>
+                                                        {cat.name}
+                                                    </a>
+                                                </li>
+                                            ))
+                                        }
                                     </ul>
+
 
                                 </div>
                             </div>
@@ -85,15 +103,13 @@ const Home = () => {
                         </div>
                     </div>
 
-
-
                 </aside>
                 <section css={style.productListWrapper}>
                     {
-                        productList?.map(product => {
+                        filterProductList()?.map(product => {
                             return (
                                 <div key={product.id} css={style.card} >
-                                    <ImageSlider                                        
+                                    <ImageSlider
                                         sx={{ width: '100%', height: '300px' }}
                                         imgs={product.productImgs}
                                     />
