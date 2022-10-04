@@ -10,6 +10,8 @@ import ImageSlider from '../components/ImageSlider'
 import ProductCard from '../components/ProductCard'
 
 import { setLoading } from '../store/slices/loading.slice'
+import { loadUserCartThunk } from '../store/slices/cartShop.slice'
+import { getUserSesion } from '../utils';
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -37,16 +39,15 @@ const Home = () => {
         }
 
     }
-    
-    useEffect(()=>{
-        console.log("HOME.JSX")
+
+    useEffect(() => {
+        if (getUserSesion().token != '')
+            dispatch(loadUserCartThunk())
+
         setTimeout(() => {
             dispatch(setLoading(false))
         }, 1000);
-    },[])
-    useEffect(()=>{
-        console.log("productList cambió")
-    },[productList])
+    }, [])
 
     return (
         <div>
@@ -119,7 +120,7 @@ const Home = () => {
                 </aside>
                 <section css={style.productListWrapper}>
                     {
-                        filterProductList()?.map(product => <ProductCard key={product.title} product={product} />)
+                        filterProductList()?.map(product => <ProductCard key={product.title} product={product} width='250px' height='400px' />)
                     }
                 </section>
             </main>

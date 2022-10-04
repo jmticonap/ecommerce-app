@@ -61,6 +61,17 @@ const appStyle = {
         }
     },
     default: {
+        login:{
+            tryPanel:{
+                display: 'flex', 
+                flexFlow:'column nowrap', 
+                backgroundColor: 'var(--bs-info)', 
+                gap: '1rem', 
+                padding: '1rem', 
+                borderRadius: '1rem',
+                alignItems: 'center'
+            }
+        },
         quantitySelector: {
             container: {
                 minWidth: '9rem',
@@ -99,7 +110,7 @@ const appStyle = {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: 20,
+                zIndex: 1100,
                 backdropFilter: visible ? 'blur(5px)': 'blur(0px)',
                 transition: '1s backdrop-filter'
             }),
@@ -229,6 +240,14 @@ const appStyle = {
                 width: _in(w) || '200px',
                 height: _in(h) || '200px'
             }),
+            containerImgs: countImgs =>({
+                width: `${countImgs*100}%`, 
+                height: '100%', 
+                position: 'relative',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                gap: '0'
+            }),
             list: (w, h) => ({
                 display: 'flex',
                 gap: 0,
@@ -236,7 +255,6 @@ const appStyle = {
                 width: _in(w) || '200px'
             }),
             img: {
-                position: 'absolute',
                 width: '100%',
                 height: '100%',
                 objectFit: 'scale-down'
@@ -266,11 +284,10 @@ const appStyle = {
                 justifyContent: 'space-between'
             },
             addCartBtn: {
-                backgroundColor: 'var(--bs-pink)',
+                
                 borderRadius: '2rem',
                 padding: '0.5rem',
-                color: '#FFF',
-                border: 'none'
+                
             },
             price: {
                 fontSize: '1.5rem',

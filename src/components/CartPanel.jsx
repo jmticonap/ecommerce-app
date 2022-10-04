@@ -7,8 +7,8 @@ import {
     setCartVisible, 
     increaseQuantity, 
     decreaseQuantity,
-    deleteArticle,
-    cleanArticles } from '../store/slices/cartShop.slice'
+    cleanArticles,
+    removeProductCartThunk } from '../store/slices/cartShop.slice'
 
 import imgEmptyCart from '../assets/img/empty-cart.png'
 import { Button } from '@mui/material';
@@ -27,7 +27,7 @@ const ItemCart = ({ article }) => {
 
     const increaseQuantityHandler = () => dispatch(increaseQuantity(article.product.id))
     const decreaseQuantityHandler = () => dispatch(decreaseQuantity(article.product.id))
-    const deleteArticleHandler = () => dispatch(deleteArticle(article.product.id))
+    const deleteArticleHandler = () => dispatch(removeProductCartThunk(article.product.id))
 
     return (
         <div css={{display:'grid', gridTemplateColumns: '128px auto'}}>
@@ -74,7 +74,7 @@ const CartPanel = () => {
         }, 500);
     }
     const cleanArticlesHandler = e => {
-        dispatch(cleanArticles)
+        dispatch(cleanArticles())
     }
 
     useEffect(() => {
@@ -106,7 +106,6 @@ const CartPanel = () => {
                                 </div>
                             )
                     }
-
 
                 </div>
                 <div css={style.shopResume}>

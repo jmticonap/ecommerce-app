@@ -14,12 +14,18 @@ import Loading from './components/Loading'
 import { useSelector } from 'react-redux'
 import CartPanel from './components/CartPanel'
 
+import ProtectedRoutes from './components/ProtectedRoutes'
+
 function App() {
     const dispatch = useDispatch()
     const isLoading = useSelector(state => state.loadingSlice)
     const isCartVisible = useSelector( state => state.cartShopSlice.visible )
 
     useEffect(() => {
+        //Init local schema for user sesion
+        if(localStorage.getItem('token') === null){
+            localStorage.setItem('token', '')
+        }
         dispatch(loadProductDataThunk())
         dispatch(loadCategoryDataThunk())
     }, [])
@@ -36,8 +42,11 @@ function App() {
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/login' element={<Login />} />
-                <Route path='/product/:id' element={<Product />} />
-                <Route path='/purchases' element={<Purchases />} />
+
+                <Route element={ <ProtectedRoutes /> } >
+                    <Route path='/product/:id' element={<Product />} />
+                    <Route path='/purchases' element={<Purchases />} />
+                </Route>
             </Routes>
         </HashRouter>
     )

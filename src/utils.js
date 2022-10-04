@@ -9,3 +9,18 @@ export const numberToCurrency = value => (
             : parseFloat(value)
     )
 )
+
+export const getUserSesion = () => {
+    return {
+        email: localStorage.getItem('email'),
+        token: localStorage.getItem('token')
+    }
+}
+
+export const getConfig = () => {
+    return {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+    }
+}
