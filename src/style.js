@@ -1,4 +1,28 @@
 import { css } from '@emotion/react'
+import { createTheme } from '@mui/material/styles'
+
+export const appStyleMUI = createTheme({
+    palette: {
+        primary: {
+            light: '#757ce8',
+            main: '#3f50b5',
+            dark: '#002884',
+            contrastText: '#fff',
+        },
+        secondary: {
+            light: '#ff7961',
+            main: '#f44336',
+            dark: '#ba000d',
+            contrastText: '#000',
+        },
+        white: {
+            light: '#FFF',
+            main: '#FFF',
+            dark: '#C2C2C2',
+            contrastText: '#000',
+        }
+    }
+})
 
 const _in = value => {
 
@@ -14,6 +38,22 @@ const _in = value => {
 const breakpoints = [576, 768, 992, 1200]
 const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`)
 const appStyle = {
+    loading: {
+        container: {
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100vw',
+            height: '100vh',
+            backdropFilter: 'blur(5px)',
+            backgroundColor: '#80808080',
+            zIndex: 10
+        }
+    },
     dark: {
         title1: {
             color: 'grey',
@@ -21,6 +61,26 @@ const appStyle = {
         }
     },
     default: {
+        quantitySelector: {
+            container: {
+                minWidth: '9rem',
+                width: '9rem',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+
+            },
+            input: {
+                border: 'none',
+                padding: '0.5rem 0',
+                width: '5rem',
+                textAlign: 'center',
+                '&:enabled,&:active,&:focus': {
+                    outline: 'none',
+                }
+            },
+
+        },
         title1: {
             color: 'hotpink',
             fontWeight: 600
@@ -29,23 +89,37 @@ const appStyle = {
             display: 'flex',
             justifyContent: 'center'
         },
-        cart: {
+        cartPanel: {
+            container: visible => ({
+                position: 'fixed',
+                top: '0',
+                left: '0',
+                width: '100vw',
+                height: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 20,
+                backdropFilter: visible ? 'blur(5px)': 'blur(0px)',
+                transition: '1s backdrop-filter'
+            }),
             shop: visible => ({
                 position: 'fixed',
                 top: 0,
                 right: visible ? '0' : '-100vw',
                 height: '100vh',
                 width: '420px',
-                backgroundColor: 'var(--body-color)',
+                backgroundColor: 'var(--bs-body-bg)',
                 padding: '2rem',
                 boxShadow: '0 0 2rem black',
                 opacity: visible ? '1' : '0',
-                transition: visible ? '0.5s right, 0.5s opacity' : '1s right, 1s opacity',
-                zIndex: 30
+                transition: '0.5s right, 0.5s opacity',
+                zIndex: 30,
+                overflow: 'scroll'
             }),
             shopTitle: {
                 textAlign: 'center',
-                paddingBottom: '5rem'
+                paddingBottom: '2.5rem'
             },
             shopResume: {
                 display: 'flex',
@@ -70,6 +144,14 @@ const appStyle = {
                 right: '0',
                 opacity: '1',
                 transition: '0.5s right, 0.5s opacity'
+            }
+        },
+        productCard: {
+            container: {
+                backgroundColor: '#FFF',
+                padding: '1rem',
+                borderRadius: '0.5rem',
+                boxShadow: '0 0 3px 0px var(--bs-info)'
             }
         },
         home: {
@@ -113,12 +195,6 @@ const appStyle = {
                 gap: '1rem',
                 width: '100%'
             },
-            card: {
-                backgroundColor: '#FFF',
-                padding: '1rem',
-                borderRadius: '0.5rem',
-                boxShadow: '0 0 3px 0px var(--bs-info)'
-            }
         },
         imageSlider: {
             wrapper: {
@@ -184,6 +260,24 @@ const appStyle = {
                 [mq[3]]: {
 
                 }
+            },
+            addCartRow: {
+                display: 'flex',
+                justifyContent: 'space-between'
+            },
+            addCartBtn: {
+                backgroundColor: 'var(--bs-pink)',
+                borderRadius: '2rem',
+                padding: '0.5rem',
+                color: '#FFF',
+                border: 'none'
+            },
+            price: {
+                fontSize: '1.5rem',
+                color: '#FFF',
+                backgroundColor: 'var(--bs-info)',
+                padding: '0.25rem 1.25rem',
+                borderRadius: '2rem'
             }
         }
     }

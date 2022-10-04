@@ -1,13 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import appStyle from '../style';
-import Jh1 from '../components/basics/Jh1';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react'
-import ImageSlider from '../components/ImageSlider';
-import { Link } from 'react-router-dom';
+
+import appStyle from '../style'
+import Jh1 from '../components/basics/Jh1'
+import ImageSlider from '../components/ImageSlider'
+import ProductCard from '../components/ProductCard'
+
+import { setLoading } from '../store/slices/loading.slice'
 
 const Home = () => {
+    const dispatch = useDispatch()
     const style = appStyle['default'].home
     const productList = useSelector(state => state.productDataSlice)
     const categoryList = useSelector(state => state.categoryDataSlice)
@@ -32,6 +37,16 @@ const Home = () => {
         }
 
     }
+    
+    useEffect(()=>{
+        console.log("HOME.JSX")
+        setTimeout(() => {
+            dispatch(setLoading(false))
+        }, 1000);
+    },[])
+    useEffect(()=>{
+        console.log("productList cambió")
+    },[productList])
 
     return (
         <div>
@@ -48,7 +63,6 @@ const Home = () => {
                             </h2>
                             <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample" >
                                 <div className="accordion-body">
-
 
                                     <ul>
                                         <li
@@ -72,7 +86,6 @@ const Home = () => {
                                             ))
                                         }
                                     </ul>
-
 
                                 </div>
                             </div>
@@ -106,17 +119,7 @@ const Home = () => {
                 </aside>
                 <section css={style.productListWrapper}>
                     {
-                        filterProductList()?.map(product => {
-                            return (
-                                <div key={product.id} css={style.card} >
-                                    <ImageSlider
-                                        sx={{ width: '100%', height: '300px' }}
-                                        imgs={product.productImgs}
-                                    />
-                                    <h3 css={{ textAlign: 'center' }}><Link to={`/product/${product.id}`}>{product.title}</Link></h3>
-                                </div>
-                            )
-                        })
+                        filterProductList()?.map(product => <ProductCard key={product.title} product={product} />)
                     }
                 </section>
             </main>
