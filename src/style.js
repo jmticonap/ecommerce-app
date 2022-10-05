@@ -164,6 +164,17 @@ const appStyle = {
                 right: '0',
                 opacity: '1',
                 transition: '0.5s right, 0.5s opacity'
+            },
+            cartArticle:{
+                backgroundColor: 'aliceblue',
+                borderRadius: '0.5rem',
+                display: 'grid', 
+                gridTemplateColumns: '128px auto',
+                padding: '1rem 0',
+                border: '1px solid transparent',
+                '&:hover':{
+                    border: '1px solid rgba(1,1,1,0.2)'
+                }
             }
         },
         productCard: {

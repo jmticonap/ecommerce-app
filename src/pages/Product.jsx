@@ -45,7 +45,7 @@ const Product = () => {
             .filter(prod => prod.category.name === product.category.name)
     )
     const [open, setOpen] = useState(false)
-    const [errMessage, setErrMessage] = useState('')
+    const [snackbarData, setSnackbarData] = useState({message:'', severity:'info'})
     const [currentImg, setCurrentImg] = useState(0)
 
     //==========================================================================
@@ -55,10 +55,21 @@ const Product = () => {
         dispatch(addProductCartThunk({
             product: product,
             quantity: quantity
-        }, errMsj => {
-            setErrMessage(errMsj)
-            setOpen(true)
-            console.log("Message error:", errMsj)
+        }, {
+            callback: res => {
+                setSnackbarData({
+                    severiry: 'success', 
+                    message: 'Article added to your cart correctly.'
+                })
+                setOpen(true)
+            },
+            errorback: errMsj => {
+                setSnackbarData({
+                    severiry: 'info', 
+                    message: errMsj
+                })
+                setOpen(true)
+            }
         }))
 
     }
@@ -91,8 +102,8 @@ const Product = () => {
                 autoHideDuration={6000}
                 onClose={closeHandler}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} >
-                <Alert onClose={closeHandler} severity="info" sx={{ width: '100%' }}>
-                    {errMessage}
+                <Alert onClose={closeHandler} severity={snackbarData.severiry} sx={{ width: '100%' }}>
+                    {snackbarData.message}
                 </Alert>
             </Snackbar>
             <div css={{ display: 'flex', gap: '2rem' }}>
@@ -119,7 +130,7 @@ const Product = () => {
                                                 ? '3px solid darkgray'
                                                 : '1px solid gray'
                                         }}
-                                        onClick={()=>currentImgHandler(i)}
+                                        onClick={() => currentImgHandler(i)}
                                         src={img} alt='Thumbnail' />
                                 ))
                             }

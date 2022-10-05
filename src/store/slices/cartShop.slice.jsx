@@ -79,7 +79,7 @@ export const loadUserCartThunk = (callback) => dispatch => {
 }
 
 
-export const addProductCartThunk = (article, errorback) => dispatch => {
+export const addProductCartThunk = (article, callbacks) => dispatch => {
     const data = {
         id: article.product.id,
         quantity: article.quantity
@@ -90,9 +90,10 @@ export const addProductCartThunk = (article, errorback) => dispatch => {
             .post('https://ecommerce-api-react.herokuapp.com/api/v1/cart', data, getConfig())
             .then(res => {
                 dispatch(appendArticle(article))
+                callbacks && callbacks.callback(res)
             })
             .catch(err => {
-                errorback && errorback(err.response.data.message)
+                callbacks && callbacks.errorback(err.response.data.message)
             })
     }
 }

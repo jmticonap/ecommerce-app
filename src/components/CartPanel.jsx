@@ -19,11 +19,13 @@ import DeleteIcon from '@mui/icons-material/Delete'
 
 import appStyle from '../style';
 import { numberToCurrency } from '../utils'
+import { useNavigate } from 'react-router-dom'
 
 
 
 const ItemCart = ({ article }) => {
     const dispatch = useDispatch()
+    const style = appStyle['default'].cartPanel
 
     const increaseQuantityHandler = () => dispatch(
         updateProductCartThunk(
@@ -44,7 +46,7 @@ const ItemCart = ({ article }) => {
     const deleteArticleHandler = () => dispatch(removeProductCartThunk(article.product.id))
 
     return (
-        <div css={{ display: 'grid', gridTemplateColumns: '128px auto' }}>
+        <div css={style.cartArticle}>
             <div css={{ width: '128px', height: '128px' }}>
                 <img css={{ width: '100%', height: '100%', objectFit: 'contain' }} src={article.product.productImgs[0]} />
             </div>
@@ -74,6 +76,7 @@ const ItemCart = ({ article }) => {
 }
 
 const CartPanel = () => {
+    const navigate = useNavigate()
     const style = appStyle['default'].cartPanel
     const [isCartVisible, setIsCartVisible] = useState(false)
     const dispatch = useDispatch()
@@ -87,8 +90,9 @@ const CartPanel = () => {
             dispatch(setCartVisible(false))
         }, 500);
     }
-    const cleanArticlesHandler = e => {
-        dispatch(cleanArticles())
+    const goPurchases = e => {
+        navigate('/purchases')
+        closePanel()
     }
 
     useEffect(() => {
@@ -102,7 +106,7 @@ const CartPanel = () => {
                     <CloseIcon />
                 </Button>
                 <h2 css={style.shopTitle}>My Cart</h2>
-                <div id="shop-container" css={{ display: 'flex', flexFlow: 'column nowrap', gap: '2rem' }}>
+                <div id="shop-container" css={{ display: 'flex', flexFlow: 'column nowrap', gap: '1rem' }}>
                     {
                         articles.length > 0
                             ? (
@@ -134,7 +138,11 @@ const CartPanel = () => {
                     </h3>
                 </div>
                 <div css={style.shopBtnContainer}>
-                    <Button onClick={cleanArticlesHandler} variant='contained' color='error'>Delete All</Button>
+                    <Button 
+                        onClick={goPurchases}
+                        sx={{borderRadius: '2rem', padding: '0.5rem 2.5rem'}}
+                        variant='contained' 
+                        color='hotpink'>Go to checkout</Button>
                 </div>
             </section >
         </div >

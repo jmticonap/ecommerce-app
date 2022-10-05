@@ -10,16 +10,17 @@ import ProductCard from '../components/ProductCard'
 
 import { setLoading } from '../store/slices/loading.slice'
 import { loadUserCartThunk } from '../store/slices/cartShop.slice'
-import { getUserSesion } from '../utils';
+import { changeCurrentCategory } from '../store/slices/appCommons.slice'
+import { getUserSesion } from '../utils'
 
-import { Container } from 'react-bootstrap';
+import { Container } from 'react-bootstrap'
 
 const Home = () => {
     const dispatch = useDispatch()
     const style = appStyle['default'].home
     const productList = useSelector(state => state.productDataSlice)
     const categoryList = useSelector(state => state.categoryDataSlice)
-    const [currentCategory, setCurrentCategory] = useState('*')
+    const currentCategory = useSelector( state => state.appCommonsSlice.currentCategory )
 
     const renderCards = () => {
 
@@ -30,7 +31,7 @@ const Home = () => {
     }
     const categoryFilter = (evt, category) => {
         evt.preventDefault()
-        setCurrentCategory(category)
+        dispatch(changeCurrentCategory(category))
     }
     const filterProductList = () => {
         if (currentCategory === '*') {
