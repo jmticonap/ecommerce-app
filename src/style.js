@@ -61,15 +61,23 @@ const appStyle = {
         }
     },
     default: {
-        login:{
-            tryPanel:{
-                display: 'flex', 
-                flexFlow:'column nowrap', 
-                backgroundColor: 'var(--bs-info)', 
-                gap: '1rem', 
-                padding: '1rem', 
+        login: {
+            tryPanel: {
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                backgroundColor: 'var(--bs-info)',
+                gap: '1rem',
+                padding: '1rem',
                 borderRadius: '1rem',
                 alignItems: 'center'
+            },
+            container: {
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+                minHeight: '90vh'
             }
         },
         quantitySelector: {
@@ -111,8 +119,9 @@ const appStyle = {
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 1100,
-                backdropFilter: visible ? 'blur(5px)': 'blur(0px)',
-                transition: '1s backdrop-filter'
+                backdropFilter: visible ? 'blur(5px)' : 'blur(0px)',
+                transition: '1s backdrop-filter',
+                backgroundColor: 'rgba(1,1,1,0.35)'
             }),
             shop: visible => ({
                 position: 'fixed',
@@ -159,11 +168,21 @@ const appStyle = {
         },
         productCard: {
             container: {
-                backgroundColor: '#FFF',
+                backgroundColor: '#D7F4FF',
                 padding: '1rem',
-                borderRadius: '0.5rem',
+                borderTopLeftRadius: '1rem',
+                borderBottomRightRadius: '1rem',
+                overflow: 'hidden',
                 boxShadow: '0 0 3px 0px var(--bs-info)'
-            }
+            },
+            priceTag: _in => ({
+                position: 'absolute',
+                transform: 'rotate(-45deg)',
+                top: '60px',
+                right: '-8px',
+                opacity: _in ? '1' : '0',
+                transition: '0.5s opacity'
+            })
         },
         home: {
             main: {
@@ -200,19 +219,20 @@ const appStyle = {
             },
             productListWrapper: {
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px,310px))',
+                gridTemplateColumns: 'repeat(auto-fit, calc(250px + 1rem))',//minmax(300px,310px)
                 justifyContent: 'center',
                 alignContent: 'center',
-                gap: '1rem',
+                rowGap: '2rem',
                 width: '100%'
             },
         },
         imageSlider: {
             wrapper: {
                 position: 'relative',
-                overflow: 'auto'
+                overflow: 'auto',
+                transition: '2s all ease'
             },
-            loader: (h) => ({
+            loader: h => ({
                 zIndex: 5,
                 width: _in(h) || '200px',
                 height: _in(h) || '200px',
@@ -240,9 +260,9 @@ const appStyle = {
                 width: _in(w) || '200px',
                 height: _in(h) || '200px'
             }),
-            containerImgs: countImgs =>({
-                width: `${countImgs*100}%`, 
-                height: '100%', 
+            containerImgs: countImgs => ({
+                width: `${countImgs * 100}%`,
+                height: '100%',
                 position: 'relative',
                 display: 'flex',
                 flexFlow: 'row nowrap',
@@ -284,10 +304,10 @@ const appStyle = {
                 justifyContent: 'space-between'
             },
             addCartBtn: {
-                
+
                 borderRadius: '2rem',
                 padding: '0.5rem',
-                
+
             },
             price: {
                 fontSize: '1.5rem',
@@ -295,6 +315,31 @@ const appStyle = {
                 backgroundColor: 'var(--bs-info)',
                 padding: '0.25rem 1.25rem',
                 borderRadius: '2rem'
+            },
+            imageControl: {
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                gap: '0'
+            },
+            slider: {
+                width: '100%',
+                minHeight: '370px',
+                maxHeight: '600px'
+            },
+            thumbnailWrapper: {
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'center',
+                gap: '1rem'
+            },
+            thumbnail: {
+                width: '3rem',
+                height: '3rem',
+                objectFit: 'contain',
+                border: '1px solid gray',
+                '&:hover': {
+                    border: '3px solid darkgray'
+                }
             }
         }
     }

@@ -6,7 +6,7 @@ import appStyle from '../style'
 import { useState } from 'react'
 import imgLoader from '../assets/img/loader.gif'
 
-const ImageSlider = ({ sx, imgs = [], ratio, id }) => {
+const ImageSlider = ({ sx, imgs = [], ratio, id, scrollIndex }) => {
     const style = appStyle['default'].imageSlider
     const [currentImg, setCurrentImg] = useState(0)
     const [isLoaded, setIsLoaded] = useState(false)
@@ -35,9 +35,18 @@ const ImageSlider = ({ sx, imgs = [], ratio, id }) => {
     const loadComplete = evt => {
         setIsLoaded(!evt.target.complete)
     }
+    const scrollHandler = evt => {
+        console.log(evt)
+    }
+
+
+    useEffect(()=>{
+        const elmt = document.querySelector(`#${id}`)
+        elmt.scrollTo((elmt.scrollWidth/imgs.length)*scrollIndex,0)
+    },[scrollIndex])
 
     return (
-        <div id={id} css={{ ...style.wrapper, ...sx, overflowX:'scroll' }}>
+        <div id={id} css={{ ...style.wrapper, ...sx, overflow:'hidden' }} onScroll={scrollHandler}>
             {/* <div onClick={goBack} css={style.btnLeft}></div>
             <div onClick={goForward} css={style.btnRight}></div> */}
 

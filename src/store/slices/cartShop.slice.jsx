@@ -47,17 +47,24 @@ const cartShopSlice = createSlice({
                     article.quantity -= 1
                 }
             })
+        },
+        changeQuantity: (state, action) => {
+            state.articles.forEach(article => {
+                if (article.product.id == action.payload.id) {
+                    article.quantity = action.payload.newQuantity
+                }
+            })
         }
     }
 })
 
 
-export const loadUserCartThunk = () => dispatch => {
+export const loadUserCartThunk = (callback) => dispatch => {
     if (localStorage.getItem('token') != '') {
         return axios
             .get('https://ecommerce-api-react.herokuapp.com/api/v1/cart', getConfig())
             .then(res => {
-                res.data.data.cart.products.forEach( async product => {
+                res.data.data.cart.products.forEach(async product => {
                     const resp = await axios.get(`https://ecommerce-api-react.herokuapp.com/api/v1/products/${product.id}`)
                     const article = {
                         product: resp.data.data.product,
@@ -65,12 +72,14 @@ export const loadUserCartThunk = () => dispatch => {
                     }
                     dispatch(appendArticle(article))
                 })
+                callback && callback()
             })
             .catch(err => console.log(err))
     }
 }
 
-export const addProductCartThunk = article => dispatch => {
+
+export const addProductCartThunk = (article, errorback) => dispatch => {
     const data = {
         id: article.product.id,
         quantity: article.quantity
@@ -79,22 +88,35 @@ export const addProductCartThunk = article => dispatch => {
     if (localStorage.getItem('token') != '') {
         return axios
             .post('https://ecommerce-api-react.herokuapp.com/api/v1/cart', data, getConfig())
-            .then ( res => {
+            .then(res => {
                 dispatch(appendArticle(article))
-            } )
-            .catch( err => {
-                alert( err.response.data.message )
-            } )
+            })
+            .catch(err => {
+                errorback && errorback(err.response.data.message)
+            })
     }
 }
 
 export const removeProductCartThunk = id => dispatch => {
-    if (localStorage.getItem('token') != ''){
+    if (localStorage.getItem('token') != '') {
         dispatch(deleteArticle(id))
         return axios
             .delete(`https://ecommerce-api-react.herokuapp.com/api/v1/cart/${id}`, getConfig())
             .then(res => console.log("Product removed", res))
             .catch(err => alert(err))
+    }
+}
+
+export const updateProductCartThunk = newQuantity => dispatch => {
+    if (localStorage.getItem('token') != '') {
+        return axios
+            .patch(`https://ecommerce-api-react.herokuapp.com/api/v1/cart`, newQuantity, getConfig())
+            .then(res => {
+                console.log("Product updated", res)
+                dispatch(changeQuantity(newQuantity))
+            })
+            .catch(err => console.log)
+
     }
 }
 
@@ -104,6 +126,7 @@ export const {
     deleteArticle,
     setCartVisible,
     increaseQuantity,
-    decreaseQuantity } = cartShopSlice.actions
+    decreaseQuantity,
+    changeQuantity } = cartShopSlice.actions
 
 export default cartShopSlice.reducer

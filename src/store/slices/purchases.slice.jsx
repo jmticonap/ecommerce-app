@@ -16,7 +16,7 @@ const purchasesSlice = createSlice({
     }
 })
 
-export const buyCartThunk = (callback) => dispatch => {
+export const buyCartThunk = (callback, errorback) => dispatch => {
     const reference = {
         "street": "Green St. 1456",
         "colony": "Southwest",
@@ -32,7 +32,7 @@ export const buyCartThunk = (callback) => dispatch => {
             dispatch(cleanArticles())
         })
         .catch(err => {
-            alert(err)
+            errorback&&errorback(err)
         })
 
     return isDone&&(<Navigate to='/' />)

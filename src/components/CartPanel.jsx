@@ -3,12 +3,12 @@ import { css } from '@emotion/react'
 
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { 
-    setCartVisible, 
-    increaseQuantity, 
-    decreaseQuantity,
+import {
+    setCartVisible,
     cleanArticles,
-    removeProductCartThunk } from '../store/slices/cartShop.slice'
+    removeProductCartThunk,
+    updateProductCartThunk
+} from '../store/slices/cartShop.slice'
 
 import imgEmptyCart from '../assets/img/empty-cart.png'
 import { Button } from '@mui/material';
@@ -25,23 +25,37 @@ import { numberToCurrency } from '../utils'
 const ItemCart = ({ article }) => {
     const dispatch = useDispatch()
 
-    const increaseQuantityHandler = () => dispatch(increaseQuantity(article.product.id))
-    const decreaseQuantityHandler = () => dispatch(decreaseQuantity(article.product.id))
+    const increaseQuantityHandler = () => dispatch(
+        updateProductCartThunk(
+            {
+                id: article.product.id,
+                newQuantity: article.quantity+1
+            }
+        )
+    )
+    const decreaseQuantityHandler = () => dispatch(
+        updateProductCartThunk(
+            {
+                id: article.product.id,
+                newQuantity: article.quantity-1
+            }
+        )
+    )
     const deleteArticleHandler = () => dispatch(removeProductCartThunk(article.product.id))
 
     return (
-        <div css={{display:'grid', gridTemplateColumns: '128px auto'}}>
+        <div css={{ display: 'grid', gridTemplateColumns: '128px auto' }}>
             <div css={{ width: '128px', height: '128px' }}>
                 <img css={{ width: '100%', height: '100%', objectFit: 'contain' }} src={article.product.productImgs[0]} />
             </div>
-            <div css={{paddingLeft:'0.5rem'}}>
+            <div css={{ paddingLeft: '0.5rem' }}>
                 <p>{article.product.title}</p>
                 <div>
                     <span>sub-total: </span>
                     <span>{numberToCurrency(article.product.price * article.quantity)}</span>
                 </div>
             </div>
-            <div css={{gridColumn: '1/3', justifyContent:'space-between', display:'flex'}}>
+            <div css={{ gridColumn: '1/3', justifyContent: 'space-between', display: 'flex' }}>
                 <div css={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <Button onClick={decreaseQuantityHandler} variant='text'>
                         <RemoveIcon />
@@ -88,7 +102,7 @@ const CartPanel = () => {
                     <CloseIcon />
                 </Button>
                 <h2 css={style.shopTitle}>My Cart</h2>
-                <div id="shop-container" css={{display:'flex', flexFlow: 'column nowrap', gap: '2rem'}}>
+                <div id="shop-container" css={{ display: 'flex', flexFlow: 'column nowrap', gap: '2rem' }}>
                     {
                         articles.length > 0
                             ? (
@@ -110,12 +124,12 @@ const CartPanel = () => {
                 </div>
                 <div css={style.shopResume}>
                     <p css={style.shopResumeItems}>
-                        <span css={{paddingRight: '1rem'}}>{articles.length}</span>
-                        {articles.length>1?'Items':'Item'}
+                        <span css={{ paddingRight: '1rem' }}>{articles.length}</span>
+                        {articles.length > 1 ? 'Items' : 'Item'}
                     </p>
                     <h3 css={style.shopResumeTotal}>
                         {
-                            numberToCurrency(articles.reduce((a,b) => a + (b.product.price*b.quantity) , 0))
+                            numberToCurrency(articles.reduce((a, b) => a + (b.product.price * b.quantity), 0))
                         }
                     </h3>
                 </div>

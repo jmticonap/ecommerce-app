@@ -3,12 +3,13 @@ import { css } from '@emotion/react'
 
 import { useNavigate } from 'react-router-dom'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, forwardRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
-import Button from '@mui/material/Button'
-import Fab from '@mui/material/Fab'
+
+import { Snackbar, Fab, Button, Slide } from '@mui/material'
+import MuiAlert from '@mui/material/Alert'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import appStyle from '../style'
@@ -16,10 +17,17 @@ import { numberToCurrency } from '../utils'
 import ImageSlider from '../components/ImageSlider'
 import QuantitySelector from '../components/QuantitySelector'
 import { setLoading } from '../store/slices/loading.slice'
-import { appendArticle, addProductCartThunk, cleanArticles, loadUserCartThunk } from '../store/slices/cartShop.slice'
+import {
+    appendArticle,
+    addProductCartThunk,
+    cleanArticles,
+    loadUserCartThunk
+} from '../store/slices/cartShop.slice'
 import ProductCard from '../components/ProductCard'
 
-
+export const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+})
 
 const Product = () => {
     const dispatch = useDispatch()
@@ -34,8 +42,11 @@ const Product = () => {
     const [quantity, setQuantity] = useState(1)
     const relatedProducts = useSelector(
         state => state.productDataSlice
-            .filter(prod => prod.category.name === product.category.name
-            ))
+            .filter(prod => prod.category.name === product.category.name)
+    )
+    const [open, setOpen] = useState(false)
+    const [errMessage, setErrMessage] = useState('')
+    const [currentImg, setCurrentImg] = useState(0)
 
     //==========================================================================
     //==============================functions===================================
@@ -44,11 +55,27 @@ const Product = () => {
         dispatch(addProductCartThunk({
             product: product,
             quantity: quantity
+        }, errMsj => {
+            setErrMessage(errMsj)
+            setOpen(true)
+            console.log("Message error:", errMsj)
         }))
 
     }
     const goBack = () => {
         navigate(-1)
+    }
+    const closeHandler = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    }
+    function TransitionLeft(props) {
+        return <Slide {...props} direction="left" />;
+    }
+    const currentImgHandler = (index) => {
+        setCurrentImg(index)
     }
 
     useEffect(() => {
@@ -59,6 +86,15 @@ const Product = () => {
 
     return (
         <Container>
+            <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={closeHandler}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} >
+                <Alert onClose={closeHandler} severity="info" sx={{ width: '100%' }}>
+                    {errMessage}
+                </Alert>
+            </Snackbar>
             <div css={{ display: 'flex', gap: '2rem' }}>
                 <Fab onClick={goBack} color='primary' aria-label='Back'>
                     <ArrowBackIcon />
@@ -67,12 +103,28 @@ const Product = () => {
             </div>
             <section css={style.container}>
                 <div css={appStyle['default'].flexCenter}>
-
-                    <ImageSlider
-                        id='product_slider'
-                        sx={{ width: '100%', minHeight: '370px', maxHeight: '600px' }}
-                        imgs={product?.productImgs} />
-
+                    <div css={style.imageControl}>
+                        <ImageSlider
+                            id='product_slider'
+                            scrollIndex={currentImg}
+                            sx={style.slider}
+                            imgs={product?.productImgs} />
+                        <div css={style.thumbnailWrapper}>
+                            {
+                                product?.productImgs.map((img, i) => (
+                                    <img
+                                        css={{
+                                            ...style.thumbnail,
+                                            border: currentImg === i
+                                                ? '3px solid darkgray'
+                                                : '1px solid gray'
+                                        }}
+                                        onClick={()=>currentImgHandler(i)}
+                                        src={img} alt='Thumbnail' />
+                                ))
+                            }
+                        </div>
+                    </div>
                 </div>
                 <div css={{ display: 'flex', flexFlow: 'column nowrap', gap: '1rem' }}>
                     <h2>{product?.title}</h2>

@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 
 import cartEmptyImg from '../assets/img/empty-cart.png'
-import sellsmanImg from '../assets/img/sellsman.jpg'
+import sellsmanImg from '../assets/img/consumidor.webp'
 import { useEffect, useState } from 'react'
 import {
     Button,
@@ -17,7 +17,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { loadUserCartThunk } from '../store/slices/cartShop.slice'
 import { buyCartThunk } from '../store/slices/purchases.slice';
+import { setLoading } from '../store/slices/loading.slice'
 import { numberToCurrency } from '../utils';
 
 
@@ -38,6 +40,12 @@ const Purchases = () => {
     }
 
     useEffect(() => {
+        if(articles.length===0) dispatch(loadUserCartThunk(()=>{
+            setTimeout(() => {
+                dispatch(setLoading(false))
+            }, 500)
+        }))
+
         if (successPurchase > 0) {
             setCurrentImg(sellsmanImg)
         } else {

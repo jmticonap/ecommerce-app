@@ -1,16 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 
-import appStyle from '../style';
-
-import React from 'react';
-import { Button } from '@mui/material'
-import { useForm } from 'react-hook-form'
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux'
 import axios from 'axios'
+
+import { Button } from '@mui/material'
+
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react';
+
+import appStyle from '../style';
+import { setLoading } from '../store/slices/loading.slice'
 
 const Login = () => {
+    const dispatch = useDispatch()
     const style = appStyle['default'].login
     const navigate = useNavigate()
     const {register, handleSubmit} = useForm()
@@ -29,8 +33,14 @@ const Login = () => {
             .catch(err => console.log(err))
     }
 
+    useEffect(()=>{
+        setTimeout(() => {
+            dispatch(setLoading(false))
+        }, 1000);
+    },[])
+
     return (
-        <div css={{display: 'flex', flexFlow:'column nowrap', alignItems:'center', justifyContent:'center', height:'100%'}}>
+        <div css={style.container}>
             <h1>LOGIN</h1>
             <div css={style.tryPanel}>
                 <h3>Credencials for try out</h3>

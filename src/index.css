@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat&display=swap');
+
 *{
     transition: bottom 0.5s;
 }
@@ -7,5 +9,6 @@ ul{
 }
 
 #root{
-    height: 100vh;
+    min-height: 100vh;
+    background-color: aliceblue;
 }
