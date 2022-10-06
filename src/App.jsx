@@ -6,15 +6,19 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Product from './pages/Product'
 import Purchases from './pages/Purchases'
+import PurchasesRecord from './pages/PurchasesRecord'
 
 import { loadProductDataThunk } from './store/slices/productData.slice'
 import { loadCategoryDataThunk } from './store/slices/categoryData.slice'
+import { loadPurchasesRecordThunk } from './store/slices/purchases.slice'
+
 import { useDispatch } from 'react-redux'
 import Loading from './components/Loading'
 import { useSelector } from 'react-redux'
 import CartPanel from './components/CartPanel'
 
 import ProtectedRoutes from './components/ProtectedRoutes'
+
 
 function App() {
     const dispatch = useDispatch()
@@ -23,9 +27,9 @@ function App() {
 
     useEffect(() => {
         //Init local schema for user sesion
-        if(localStorage.getItem('token') === null){
-            localStorage.setItem('token', '')
-        }
+        if(localStorage.getItem('token') === null) localStorage.setItem('token', '')
+        if(localStorage.getItem('token') != '') dispatch(loadPurchasesRecordThunk())
+
         dispatch(loadProductDataThunk())
         dispatch(loadCategoryDataThunk())
     }, [])
@@ -46,6 +50,7 @@ function App() {
                 <Route element={ <ProtectedRoutes /> } >
                     <Route path='/product/:id' element={<Product />} />
                     <Route path='/purchases' element={<Purchases />} />
+                    <Route path='/purchases/record' element={<PurchasesRecord />} />
                 </Route>
             </Routes>
         </HashRouter>

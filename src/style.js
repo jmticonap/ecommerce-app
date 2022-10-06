@@ -24,6 +24,13 @@ export const appStyleMUI = createTheme({
     }
 })
 
+export const myPalette = {
+    title: '#c99fb6',
+    mainButton: '#c99fb6',
+    softPurple: '#c99fb6'
+
+}
+
 const _in = value => {
 
     if (value === undefined)

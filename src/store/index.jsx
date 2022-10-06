@@ -5,6 +5,7 @@ import categoryDataSlice from "./slices/categoryData.slice"
 import cartShopSlice from "./slices/cartShop.slice"
 import loadingSlice from "./slices/loading.slice"
 import appCommonsSlice from "./slices/appCommons.slice"
+import purchasesSlice from "./slices/purchases.slice"
 
 const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ const store = configureStore({
         productDataSlice,
         categoryDataSlice,
         cartShopSlice,
-        loadingSlice
+        loadingSlice,
+        purchasesSlice
     }
 })
 

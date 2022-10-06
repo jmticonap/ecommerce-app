@@ -10,10 +10,12 @@ import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import Offcanvas from 'react-bootstrap/Offcanvas'
+import { NavDropdown } from 'react-bootstrap'
 
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setCartVisible, cleanArticles } from '../store/slices/cartShop.slice'
+import { cleanRegistry } from '../store/slices/purchases.slice'
 
 import { getUserSesion } from '../utils'
 import { useNavigate } from 'react-router-dom'
@@ -34,6 +36,7 @@ const JNavbar = () => {
         localStorage.setItem('email', '')
         //clean article from cartShop
         dispatch(cleanArticles())
+        dispatch(cleanRegistry())
         navigate('/')
     }
 
@@ -55,7 +58,13 @@ const JNavbar = () => {
                     <Offcanvas.Body>
                         <Nav className="justify-content-end flex-grow-1 pe-3" css={{gap:'2rem'}}>
                             <Nav.Link as={Link} to='/'>Home</Nav.Link>
-                            <Nav.Link as={Link} to='/purchases'>Purchases</Nav.Link>
+                            <NavDropdown title='Purchases'>
+                                <NavDropdown.Item>
+                                    <Nav.Link as={Link} to='/purchases'>Current list</Nav.Link>
+                                    <Nav.Link as={Link} to='/purchases/record'>Purchases record</Nav.Link>
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                            
                             <Nav.Link onClick={openCart} as={Button} variant='text' color='white'>
                                 <ShopIcon color='white' />
                                 <span css={{ padding: '0 0.5rem' }}>{cartLength}</span>

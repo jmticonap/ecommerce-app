@@ -1,11 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+
+import { Autocomplete, TextField } from '@mui/material';
 
 import appStyle from '../style'
-import Jh1 from '../components/basics/Jh1'
 import ProductCard from '../components/ProductCard'
 
 import { setLoading } from '../store/slices/loading.slice'
@@ -17,10 +19,11 @@ import { Container } from 'react-bootstrap'
 
 const Home = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const style = appStyle['default'].home
     const productList = useSelector(state => state.productDataSlice)
     const categoryList = useSelector(state => state.categoryDataSlice)
-    const currentCategory = useSelector( state => state.appCommonsSlice.currentCategory )
+    const currentCategory = useSelector(state => state.appCommonsSlice.currentCategory)
 
     const renderCards = () => {
 
@@ -41,6 +44,14 @@ const Home = () => {
         }
 
     }
+    const productTitleList = () => productList
+        .map(product => ({
+            id: product.id,
+            label: product.title
+        }))
+    const goToProduct = (evt, itm) => {
+        navigate(`/product/${itm.id}`)
+    }
 
     useEffect(() => {
         if (getUserSesion().token != '')
@@ -53,36 +64,48 @@ const Home = () => {
 
     return (
         <Container>
-            <Jh1>HOME APP</Jh1>
+            <div css={{ display: 'grid', gridTemplateColumns: '250px auto' }}>
+                <h2 css={{ color: '#ffcfca', fontWeight: '600', fontSize: '2rem' }}>Home App</h2>
+                <div css={{padding:'0 0 1rem 0'}}>
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-products"
+                        options={productTitleList()}
+                        onChange={goToProduct}
+                        sx={{ width: '90%' }}
+                        renderInput={(params) => <TextField {...params} label="Product" />}
+                    />
+                </div>
+            </div>
             <main css={style.main}>
                 <aside css={{ width: '250px' }}>
 
                     <div id="accordionExample">
                         <div>
                             <h2>Categories</h2>
-                                    <ul>
-                                        <li
-                                            css={style.filterLi}>
+                            <ul>
+                                <li
+                                    css={style.filterLi}>
+                                    <a
+                                        onClick={evt => categoryFilter(evt, '*')}
+                                        css={currentCategory == '*' ? style.filterLinkActive : style.filterLink}
+                                        href=''>All categories</a>
+                                </li>
+                                {
+                                    categoryList?.map(cat => (
+                                        cat.status == 'active' &&
+                                        <li css={style.filterLi} key={cat.name}>
                                             <a
-                                                onClick={evt => categoryFilter(evt, '*')}
-                                                css={currentCategory == '*' ? style.filterLinkActive : style.filterLink}
-                                                href=''>All categories</a>
+                                                onClick={evt => categoryFilter(evt, cat)}
+                                                css={currentCategory.id == cat.id ? style.filterLinkActive : style.filterLink}
+                                                href=''>
+                                                {cat.name}
+                                            </a>
                                         </li>
-                                        {
-                                            categoryList?.map(cat => (
-                                                cat.status == 'active' &&
-                                                <li css={style.filterLi} key={cat.name}>
-                                                    <a
-                                                        onClick={evt => categoryFilter(evt, cat)}
-                                                        css={currentCategory.id == cat.id ? style.filterLinkActive : style.filterLink}
-                                                        href=''>
-                                                        {cat.name}
-                                                    </a>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
-                            
+                                    ))
+                                }
+                            </ul>
+
                         </div>
 
                     </div>

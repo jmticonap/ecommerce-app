@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 import appStyle from '../style';
 import { setLoading } from '../store/slices/loading.slice'
+import { loadPurchasesRecordThunk } from '../store/slices/purchases.slice';
 
 const Login = () => {
     const dispatch = useDispatch()
@@ -28,6 +29,7 @@ const Login = () => {
             .then(res => {
                 localStorage.setItem('email', res.data.data.user.email)
                 localStorage.setItem('token', res.data.data.token)
+                dispatch(loadPurchasesRecordThunk())
                 navigate('/')
             })
             .catch(err => console.log(err))

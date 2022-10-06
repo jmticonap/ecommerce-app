@@ -9,9 +9,16 @@ import { cleanArticles } from './cartShop.slice'
 const purchasesSlice = createSlice({
     name: 'purchases',
     initialState: {
-
+        registry: []
     },
     reducers: {
+        appendItemRegistry: (state, action) => {
+            if (action.payload)
+                state.registry.push(...action.payload)
+        },
+        cleanRegistry: state => {
+            state.registry = []
+        }
 
     }
 })
@@ -38,6 +45,16 @@ export const buyCartThunk = (callback, errorback) => dispatch => {
     return isDone&&(<Navigate to='/' />)
 }
 
-export const { } = purchasesSlice.actions
+export const loadPurchasesRecordThunk = () => dispatch => {
+    axios
+        .get('https://ecommerce-api-react.herokuapp.com/api/v1/purchases', getConfig())
+        .then(res => {
+            dispatch(appendItemRegistry(res.data.data.purchases))
+        })
+}
+
+export const { 
+    appendItemRegistry, 
+    cleanRegistry } = purchasesSlice.actions
 
 export default purchasesSlice.reducer
