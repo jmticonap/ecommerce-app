@@ -62,10 +62,10 @@ const cartShopSlice = createSlice({
 export const loadUserCartThunk = (callback) => dispatch => {
     if (localStorage.getItem('token') != '') {
         return axios
-            .get('https://ecommerce-api-react.herokuapp.com/api/v1/cart', getConfig())
+            .get('https://e-commerce-api.academlo.tech/api/v1/cart', getConfig())
             .then(res => {
                 res.data.data.cart.products.forEach(async product => {
-                    const resp = await axios.get(`https://ecommerce-api-react.herokuapp.com/api/v1/products/${product.id}`)
+                    const resp = await axios.get(`https://e-commerce-api.academlo.tech/api/v1/products/${product.id}`)
                     const article = {
                         product: resp.data.data.product,
                         quantity: product.productsInCart.quantity
@@ -87,7 +87,7 @@ export const addProductCartThunk = (article, callbacks) => dispatch => {
 
     if (localStorage.getItem('token') != '') {
         return axios
-            .post('https://ecommerce-api-react.herokuapp.com/api/v1/cart', data, getConfig())
+            .post('https://e-commerce-api.academlo.tech/api/v1/cart', data, getConfig())
             .then(res => {
                 dispatch(appendArticle(article))
                 callbacks && callbacks.callback(res)
@@ -102,7 +102,7 @@ export const removeProductCartThunk = id => dispatch => {
     if (localStorage.getItem('token') != '') {
         dispatch(deleteArticle(id))
         return axios
-            .delete(`https://ecommerce-api-react.herokuapp.com/api/v1/cart/${id}`, getConfig())
+            .delete(`https://e-commerce-api.academlo.tech/api/v1/cart/${id}`, getConfig())
             .then(res => console.log("Product removed", res))
             .catch(err => alert(err))
     }
@@ -111,7 +111,7 @@ export const removeProductCartThunk = id => dispatch => {
 export const updateProductCartThunk = newQuantity => dispatch => {
     if (localStorage.getItem('token') != '') {
         return axios
-            .patch(`https://ecommerce-api-react.herokuapp.com/api/v1/cart`, newQuantity, getConfig())
+            .patch(`https://e-commerce-api.academlo.tech/api/v1/cart`, newQuantity, getConfig())
             .then(res => {
                 console.log("Product updated", res)
                 dispatch(changeQuantity(newQuantity))

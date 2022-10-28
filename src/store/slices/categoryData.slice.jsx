@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import axios from 'axios'
 
-const allCategories = 'https://ecommerce-api-react.herokuapp.com/api/v1/products/categories'
+const allCategories = 'https://e-commerce-api.academlo.tech/api/v1/products/categories'
 
 const categoryDataSlice = createSlice({
     name: 'category_data',

@@ -33,7 +33,7 @@ export const buyCartThunk = (callback, errorback) => dispatch => {
     }
     let isDone = false
     axios
-        .post(`https://ecommerce-api-react.herokuapp.com/api/v1/purchases`, reference, getConfig())
+        .post(`https://e-commerce-api.academlo.tech/api/v1/purchases`, reference, getConfig())
         .then(res => {
             callback(res)
             dispatch(cleanArticles())
@@ -47,7 +47,7 @@ export const buyCartThunk = (callback, errorback) => dispatch => {
 
 export const loadPurchasesRecordThunk = () => dispatch => {
     axios
-        .get('https://ecommerce-api-react.herokuapp.com/api/v1/purchases', getConfig())
+        .get('https://e-commerce-api.academlo.tech/api/v1/purchases', getConfig())
         .then(res => {
             dispatch(appendItemRegistry(res.data.data.purchases))
         })
